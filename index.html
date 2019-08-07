@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrabble Add</title>
+</head>
+<body>
+    <div>
+        <h1>Anke</h1>
+        <ul id="pl1list">
+        </ul>
+        <p>Total: <output id="pl1res">0</output></p>
+        <input id="pl1"><button id="pl1but">Add</button>
+    </div>
+    <div>
+        <h1>Chris</h1>
+        <ul id="pl2list">
+        </ul>
+        <p>Total: <output id="pl2res">0</output></p>
+        <input id="pl2"><button id="pl2but">Add</button>
+    </div>
+<script>
+const calculatetotals = () => {
+    let total = 0;
+    [...document.querySelectorAll('#pl1list li')].forEach((item => {
+        total += +item.innerText.match(/\d+/);
+    }));
+    document.querySelector('#pl1res').innerText = total;
+    total = 0;
+    [...document.querySelectorAll('#pl2list li')].forEach((item => {
+        total += +item.innerText.match(/\d+/);
+    }));
+    document.querySelector('#pl2res').innerText = total;
+};
+const t = document.querySelector('body');
+t.addEventListener('click', ev => {
+    if (ev.target.nodeName.toLowerCase() === 'button') {
+        let id = ev.target.id;
+        if (id !== '') {
+            let value = document.querySelector(`#${id.replace('but','')}`).value;
+            if (value !== '') {
+                document.querySelector(`#${id.replace('but','list')}`).innerHTML += `
+                <li>${value}<button>x</button></li>`;   
+            }
+            calculatetotals();
+        } else {
+            ev.target.parentNode.parentNode.removeChild(ev.target.parentNode);
+            calculatetotals();
+        }
+        ev.preventDefault();
+    }
+});
+</script>
+<style>
+body {
+    font-family: 'Arial Narrow', Arial, sans-serif
+}
+div {
+    width: 50%;
+    float: left;
+}
+ul {
+    margin: 1em 0;
+    padding: 0;
+    list-style: none;
+}
+li {
+    list-style: none;
+    padding: .5em .2em;
+    border-bottom: 1px solid #ccc;
+}
+li button {
+    float: right;
+    border: none;
+    width: 1em;
+    background: transparent;
+    color: #c00;
+}
+p {
+    background: #333;
+    color: #fff;
+    padding: .2em;
+}
+</style>
+</body>
+</html>
