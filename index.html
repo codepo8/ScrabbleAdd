@@ -8,10 +8,7 @@
         body {
             font-family: 'Arial Narrow', Arial, sans-serif;
             max-width: 600px;
-        }
-        div {
-            width: 50%;
-            float: left;
+            margin: 0 auto;
         }
         ul {
             margin: 1em 0;
@@ -36,45 +33,71 @@
             padding: .2em;
             margin: .2em .1em;
         }
-        hr {
-            clear: both; 
-            border: none; 
-            height: 0px; 
-            overflow: hidden;
-        }
         h1 {
             clear:both;
-            margin:0
+            margin: .2em;
         }
-        h1 span {float: left}
-        input[type=search] {
-            width: 75%;
+        h1 span {
+            float: left;
         }
-        button {
+        button, input {
             font: inherit;
-            width: 3em;
             border: none;
             background: transparent;
+        }
+        .row {
+            display: flex;
+        }
+        .half {
+            flex-grow: 1;
+        }
+        .form {
+            align-items: stretch;
+            flex-grow: 1;
+            display: flex;
+        }
+        .form input {
+            padding: .2em;
+            margin: .2em .1em;
+            display: block;
+            flex-grow: 1;
+            background: #ccc;
+        }
+        .form button {
+            padding: .2em;
+            margin: .2em .1em;
+            display: block;
+            background: #369;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Anke<span id="status1"></span></h1>
-        <ul id="pl1list"></ul>
+    <div class="row">
+        <div class="half">
+            <h1>Anke<span id="status1"></span></h1>
+            <ul id="pl1list"></ul>
+        </div>
+        <div class="half">
+            <h1>Chris<span id="status2"></span></h1>
+            <ul id="pl2list"></ul>
+        </div>
     </div>
-    <div>
-        <h1>Chris<span id="status2"></span></h1>
-        <ul id="pl2list"></ul>
-    </div>
-    <hr>
-    <div class="foot">
-        <p>Total: <output id="pl1res">0</output></p>
-        <input id="pl1" type="search"><button id="p1">Add</button>
-    </div>
-    <div class="foot"> 
-        <p>Total: <output id="pl2res">0</output></p>
-        <input id="pl2" type="search"><button id="p2">Add</button>
+    <div class="row">
+        <div class="half">
+            <p>Total: <output id="pl1res">0</output></p>
+        </div>
+        <div class="half">
+            <p>Total: <output id="pl2res">0</output></p>
+        </div>
+        </div>
+    <div class="row">
+        <div class="form">
+            <input id="pl1" type="search"><button id="p1">Add</button>
+        </div>
+        <div class="form">
+            <input id="pl2" type="search"><button id="p2">Add</button>
+        </div>
     </div>
 <script>
 (function(){
