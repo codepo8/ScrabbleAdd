@@ -4,44 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrabble Add</title>
+    <style>
+        body {
+            font-family: 'Arial Narrow', Arial, sans-serif;
+            max-width: 600px;
+        }
+        div {
+            width: 50%;
+            float: left;
+        }
+        ul {
+            margin: 1em 0;
+            padding: 0;
+            list-style: none;
+        }
+        li {
+            list-style: none;
+            padding: .5em .2em;
+            border-bottom: 1px solid #ccc;
+        }
+        li button {
+            float: right;
+            border: none;
+            width: 1em;
+            background: transparent;
+            color: #c00;
+        }
+        p {
+            background: #333;
+            color: #fff;
+            padding: .2em;
+            margin: .2em .1em;
+        }
+        hr {
+            clear: both; 
+            border: none; 
+            height: 0px; 
+            overflow: hidden;
+        }
+        h1 {
+            clear:both;
+            margin:0
+        }
+        h1 span {float: left}
+        input[type=search] {
+            width: 75%;
+        }
+        button {
+            font: inherit;
+            width: 3em;
+            border: none;
+            background: transparent;
+        }
+    </style>
 </head>
 <body>
     <div>
-        <h1>Anke</h1>
-        <ul id="pl1list">
-        </ul>
-        <p>Total: <output id="pl1res">0</output></p>
-        <input id="pl1" type="search"><button id="pl1but">Add</button>
+        <h1>Anke<span id="status1"></span></h1>
+        <ul id="pl1list"></ul>
     </div>
     <div>
-        <h1>Chris</h1>
-        <ul id="pl2list">
-        </ul>
+        <h1>Chris<span id="status2"></span></h1>
+        <ul id="pl2list"></ul>
+    </div>
+    <hr>
+    <div class="foot">
+        <p>Total: <output id="pl1res">0</output></p>
+        <input id="pl1" type="search"><button id="p1">Add</button>
+    </div>
+    <div class="foot"> 
         <p>Total: <output id="pl2res">0</output></p>
-        <input id="pl2" type="search"><button id="pl2but">Add</button>
+        <input id="pl2" type="search"><button id="p2">Add</button>
     </div>
 <script>
+(function(){
+const players = [{
+        list: document.querySelector('#pl1list'),
+        listitems: document.querySelectorAll('#pl1list li'),
+        total: document.querySelector('#pl1res'),
+        field: document.querySelector('#pl1'),
+        status: document.querySelector('#status1'),
+        moves: [],
+        score: 0
+    },{
+        list: document.querySelector('#pl2list'),
+        listitems: document.querySelectorAll('#pl2list li'),
+        total: document.querySelector('#pl2res'),
+        field: document.querySelector('#pl2'),
+        status: document.querySelector('#status2'),
+        moves: [],
+        score: 0
+}];
 const calculatetotals = () => {
-    let total = 0;
-    [...document.querySelectorAll('#pl1list li')].forEach((item => {
-        total += +item.innerText.match(/\d+/);
-    }));
-    document.querySelector('#pl1res').innerText = total;
-    total = 0;
-    [...document.querySelectorAll('#pl2list li')].forEach((item => {
-        total += +item.innerText.match(/\d+/);
-    }));
-    document.querySelector('#pl2res').innerText = total;
+    players.forEach((player,key) => {
+        let total = 0;
+        players[key].moves = [];
+        [...players[key].list.querySelectorAll('li')].forEach((item => {
+            total += +item.dataset.points;
+            players[key].moves.push({
+                word:item.dataset.word,
+                value:+item.dataset.points
+            });
+        }));
+        players[key].total.innerText = total;
+        players[key].score = total;
+    });
+    let delta = (players[0].score - players[1].score);
+    if (delta === 0) {
+        players[0].status.innerText = '';
+        players[1].status.innerText = '';
+    }
+    if (delta < 0) {
+        players[0].status.innerText = '😒';
+        players[1].status.innerText = '😁';
+        players[1].total.innerText = `${players[1].score} (+${-delta})`;
+    }
+    if (delta > 0) {
+        players[0].status.innerText = '😁';
+        players[1].status.innerText = '😒';
+        players[0].total.innerText = `${players[0].score} (+${delta})`;
+    }
 };
-const t = document.querySelector('body');
-t.addEventListener('click', ev => {
+document.querySelector('body').addEventListener('click', ev => {
     if (ev.target.nodeName.toLowerCase() === 'button') {
-        let id = ev.target.id;
-        if (id !== '') {
-            let value = document.querySelector(`#${id.replace('but','')}`).value;
+        let id = +ev.target.id.replace('p','') - 1;
+        console.log(id);
+        if (id > -1) {
+            let value = players[id].field.value;
             if (value !== '') {
-                document.querySelector(`#${id.replace('but','list')}`).innerHTML += `
-                <li>${value}<button>x</button></li>`;   
+                players[id].list.innerHTML += `
+                <li data-word="${value.replace(/[\nx|\s]\d+/,'')}" 
+                    data-points=${+value.match(/\d+/)}>
+                    ${value}
+                    <button>x</button>
+                </li>`;   
+                players[id].field.value = '';
             }
             calculatetotals();
         } else {
@@ -51,37 +148,7 @@ t.addEventListener('click', ev => {
         ev.preventDefault();
     }
 });
+})();
 </script>
-<style>
-body {
-    font-family: 'Arial Narrow', Arial, sans-serif
-}
-div {
-    width: 50%;
-    float: left;
-}
-ul {
-    margin: 1em 0;
-    padding: 0;
-    list-style: none;
-}
-li {
-    list-style: none;
-    padding: .5em .2em;
-    border-bottom: 1px solid #ccc;
-}
-li button {
-    float: right;
-    border: none;
-    width: 1em;
-    background: transparent;
-    color: #c00;
-}
-p {
-    background: #333;
-    color: #fff;
-    padding: .2em;
-}
-</style>
 </body>
 </html>
