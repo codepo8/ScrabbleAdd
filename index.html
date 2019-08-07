@@ -6,7 +6,7 @@
     <title>Scrabble Add</title>
     <style>
         body {
-            font-family: 'Arial Narrow', Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -18,12 +18,14 @@
         li {
             list-style: none;
             padding: .5em .2em;
+            margin-right: .2em;
             border-bottom: 1px solid #ccc;
         }
         li button {
             float: right;
             border: none;
             width: 1em;
+            margin-right: .5em;
             background: transparent;
             color: #c00;
         }
@@ -34,8 +36,9 @@
             margin: .2em .1em;
         }
         h1 {
-            clear:both;
-            margin: .2em;
+            font-weight: normal;
+            clear: both;
+            margin: .2em;   
         }
         h1 span {
             float: left;
@@ -49,7 +52,7 @@
             display: flex;
         }
         .half {
-            flex-grow: 1;
+            flex: 1;
         }
         .form {
             align-items: stretch;
@@ -90,7 +93,7 @@
         <div class="half">
             <p>Total: <output id="pl2res">0</output></p>
         </div>
-        </div>
+    </div>
     <div class="row">
         <div class="form">
             <input id="pl1" type="search"><button id="p1">Add</button>
