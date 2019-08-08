@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrabble Add</title>
     <style>
-        body {
+        html {
             font-family: Arial, Helvetica, sans-serif;
-            margin: 0 auto;
-            padding: 2em;
+            font-size: 3vw;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            margin: 0;
+            padding: 1em;
+            
         }
         ul {
             margin: 1em 0;
@@ -38,12 +44,16 @@
         h1 {
             font-weight: normal;
             clear: both;
+            font-size: 1.4em;
             margin: .2em;   
         }
         h1 span {
             float: left;
         }
         button, input {
+            margin: 0;
+            padding: 0;
+            display: inline-block;
             font: inherit;
             border: none;
             background: transparent;
@@ -55,21 +65,19 @@
             flex: 1;
         }
         .form {
-            align-items: stretch;
-            flex: 1;
             display: flex;
         }
         .form input {
             padding: .2em;
             margin: .2em .1em;
-            display: block;
             flex-grow: 1;
+            width: 3em;
+            overflow: hidden;
             background: #ccc;
         }
         .form button {
             padding: .2em;
             margin: .2em .1em;
-            display: block;
             background: #369;
             color: #fff;
         }
@@ -95,11 +103,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="form">
-            <input id="pl1" type="search"><button id="p1">Add</button>
+        <div class="half">
+            <div class="form">
+                <input id="pl1" type="search"><button id="p1">Add</button>
+             </div>
         </div>
-        <div class="form">
-            <input id="pl2" type="search"><button id="p2">Add</button>
+        <div class="half">
+            <div class="form">
+                <input id="pl2" type="search"><button id="p2">Add</button>
+            </div>
         </div>
     </div>
 <script>
