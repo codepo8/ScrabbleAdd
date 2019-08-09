@@ -205,6 +205,7 @@ document.querySelector('body').addEventListener('click', ev => {
                     <button>x</button>
                 </li>`;
                 players[id].field.value = '';
+                players[id].list.lastChild.scrollIntoView({behavior: 'smooth'});
             }
             calculatetotals();
         } else {
