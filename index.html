@@ -14,7 +14,6 @@
         body {
             margin: 0;
             padding: 1em;
-            
         }
         ul {
             margin: 1em 0;
@@ -61,6 +60,22 @@
         .row {
             display: flex;
         }
+        .footer {
+            width: calc(100% - 2em);
+            position: fixed;
+            bottom: 0;
+            margin-bottom: 1em;
+        }
+        .header {
+            width: calc(100% - 2em);
+            position: fixed;
+            top: 0;
+        }
+        .body {
+            margin-top: 0.8em;
+            height: 68vh;
+            overflow: scroll;
+        }
         .half {
             flex: 1;
         }
@@ -76,7 +91,7 @@
             background: #ccc;
         }
         .form button {
-            padding: .2em;
+            padding: .2em .5em;
             margin: .2em .1em;
             background: #369;
             color: #fff;
@@ -84,33 +99,46 @@
     </style>
 </head>
 <body>
-    <div class="row">
-        <div class="half">
-            <h1>Anke<span id="status1"></span></h1>
-            <ul id="pl1list"></ul>
-        </div>
-        <div class="half">
-            <h1>Chris<span id="status2"></span></h1>
-            <ul id="pl2list"></ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="half">
-            <p>Total: <output id="pl1res">0</output></p>
-        </div>
-        <div class="half">
-            <p>Total: <output id="pl2res">0</output></p>
+
+    <div class="header">
+        <div class="row">
+            <div class="half">
+                <h1>Anke<span id="status1"></span></h1>
+            </div>
+            <div class="half">
+                <h1>Chris<span id="status2"></span></h1>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="half">
-            <div class="form">
-                <input id="pl1" type="search"><button id="p1">Add</button>
-             </div>
+    <div class="body">
+        <div class="row">
+            <div class="half">
+                <ul id="pl1list"></ul>
+            </div>
+            <div class="half">
+                <ul id="pl2list"></ul>
+            </div>
         </div>
-        <div class="half">
-            <div class="form">
-                <input id="pl2" type="search"><button id="p2">Add</button>
+    </div>
+    <div class="footer">
+        <div class="row">
+            <div class="half">
+                <p>Total: <output id="pl1res">0</output></p>
+            </div>
+            <div class="half">
+                <p>Total: <output id="pl2res">0</output></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="half">
+                <div class="form">
+                    <input id="pl1" type="search"><button id="p1">Add</button>
+                </div>
+            </div>
+            <div class="half">
+                <div class="form">
+                    <input id="pl2" type="search"><button id="p2">Add</button>
+                </div>
             </div>
         </div>
     </div>
@@ -172,10 +200,10 @@ document.querySelector('body').addEventListener('click', ev => {
             if (value !== '') {
                 players[id].list.innerHTML += `
                 <li data-word="${value.replace(/[\nx|\s]\d+/,'')}" 
-                    data-points=${+value.match(/\d+/)}>
+                    data-points=${+value.match(/-?\d+/)}>
                     ${value}
                     <button>x</button>
-                </li>`;   
+                </li>`;
                 players[id].field.value = '';
             }
             calculatetotals();
