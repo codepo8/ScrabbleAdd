@@ -25,9 +25,12 @@
             padding: .5em .2em;
             margin-right: .2em;
             border-bottom: 1px solid #ccc;
+            position: relative;
         }
         li button {
-            float: right;
+            position: absolute;
+            top: .4em;
+            right: 0;
             border: none;
             width: 1em;
             margin-right: .5em;
@@ -79,6 +82,10 @@
         .half {
             flex: 1;
         }
+        form {
+            margin: 0;
+            padding: 0;
+        }
         .form {
             display: flex;
         }
@@ -99,7 +106,6 @@
     </style>
 </head>
 <body>
-
     <div class="header">
         <div class="row">
             <div class="half">
@@ -131,19 +137,26 @@
         </div>
         <div class="row">
             <div class="half">
-                <div class="form">
+                <form class="form">
                     <input id="pl1" type="search"><button id="p1">Add</button>
-                </div>
+                </form>
             </div>
             <div class="half">
-                <div class="form">
+                <form class="form">
                     <input id="pl2" type="search"><button id="p2">Add</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 <script>
 (function(){
+/* Check URL parameters */
+const gamename = (window.location.href.indexOf('game') === -1) ? 
+                 'safety' : window.location.href.split('=')[1]; 
+
+
+
+
 const players = [{
         list: document.querySelector('#pl1list'),
         listitems: document.querySelectorAll('#pl1list li'),
@@ -161,6 +174,7 @@ const players = [{
         moves: [],
         score: 0
 }];
+
 const calculatetotals = () => {
     players.forEach((player,key) => {
         let total = 0;
@@ -194,14 +208,13 @@ const calculatetotals = () => {
 document.querySelector('body').addEventListener('click', ev => {
     if (ev.target.nodeName.toLowerCase() === 'button') {
         let id = +ev.target.id.replace('p','') - 1;
-        console.log(id);
         if (id > -1) {
             let value = players[id].field.value;
             if (value !== '') {
                 players[id].list.innerHTML += `
-                <li data-word="${value.replace(/[\nx|\s]\d+/,'')}" 
+                <li data-word="${value.replace(/[\nx|\s]\d+/,'').toUpperCase()}" 
                     data-points=${+value.match(/-?\d+/)}>
-                    ${value}
+                    ${value.toUpperCase()}
                     <button>x</button>
                 </li>`;
                 players[id].field.value = '';
@@ -215,6 +228,24 @@ document.querySelector('body').addEventListener('click', ev => {
         ev.preventDefault();
     }
 });
+
+function testfill() {
+    let now = '1';
+    const words = 'Obacht! Das hurtig Quasselstrippe ergötzen. Der hochnäsig Kerbholz. Günstling und Affenzahn frickeln piesacken Springinsfeld. Der pomadig Schelm katzbuckeln. Der hanebüchen Bordsteinschwalbe jauchzen. Das halsstarrig Kokolores lobpreisen. Die halbstark Sülze liebkosen. Die Dreikäsehoch verhaspeln das feist Dreikäsehoch. Kesselflicker und Kinkerlitzchen krakelen halbstark Mettigel. Der schamlos Fuchtel picheln. Die Hupfdohle erquicken das famos Schlachtschüssel. Prahlhans und Kittchen friemeln feist Fatzke. Die Aue gutheißen der pfundig Stümper. Gott zum Gruße!'.split(' ');
+    words.forEach((word) => {
+        word += ' ' + (parseInt(Math.random() * 123, 10) + 1);
+        document.querySelector(`#pl${now}list`).innerHTML += `
+        <li data-word="${word.replace(/[\nx|\s]\d+/,'').toUpperCase()}" 
+            data-points=${+word.match(/-?\d+/)}>
+            ${word.toUpperCase()}
+            <button>x</button>
+        </li>`;
+        now = (now === 1) ? 2 : 1;    
+    })
+}
+if (window.location.href.indexOf('debug') !== -1) {
+    testfill();
+}
 })();
 </script>
 </body>
