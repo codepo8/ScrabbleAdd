@@ -4,120 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrabble Add</title>
-    <style>
-        html {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 3vw;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            margin: 0;
-            padding: 1em;
-        }
-        ul {
-            margin: 1em 0;
-            padding: 0;
-            list-style: none;
-        }
-        li {
-            list-style: none;
-            padding: .5em .2em;
-            margin-right: .2em;
-            border-bottom: 1px solid #ccc;
-            position: relative;
-        }
-        li button {
-            position: absolute;
-            top: .4em;
-            right: 0;
-            border: none;
-            width: 1em;
-            margin-right: .5em;
-            background: transparent;
-            color: #c00;
-        }
-        p {
-            background: #333;
-            color: #fff;
-            padding: .2em;
-            margin: .2em .1em;
-        }
-        h1 {
-            font-weight: normal;
-            clear: both;
-            font-size: 1.4em;
-            margin: .2em;   
-        }
-        h1 span {
-            float: left;
-        }
-        button, input {
-            margin: 0;
-            padding: 0;
-            display: inline-block;
-            font: inherit;
-            border: none;
-            background: transparent;
-        }
-        .row {
-            display: flex;
-        }
-        .footer {
-            width: calc(100% - 2em);
-            position: fixed;
-            bottom: 0;
-            margin-bottom: 1em;
-        }
-        .header {
-            width: calc(100% - 2em);
-            position: fixed;
-            top: 0;
-        }
-        .body {
-            margin-top: 0.8em;
-            height: 68vh;
-            overflow: scroll;
-        }
-        .half {
-            flex: 1;
-        }
-        form {
-            margin: 0;
-            padding: 0;
-        }
-        .form {
-            display: flex;
-        }
-        .form input {
-            padding: .2em;
-            margin: .2em .1em;
-            flex-grow: 1;
-            width: 3em;
-            overflow: hidden;
-            background: #ccc;
-        }
-        .form button {
-            padding: .2em .5em;
-            margin: .2em .1em;
-            background: #369;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="ScrabbleAdd.css">
 </head>
 <body>
     <div class="header">
         <div class="row">
             <div class="half">
-                <h1>Anke<span id="status1"></span></h1>
+                <h1><span id="status1"></span><input type="button" value="Anke" id="pl1name"></h1>
             </div>
             <div class="half">
-                <h1>Chris<span id="status2"></span></h1>
+                <h1><span id="status2"></span><input type="button" value="Chris" id="pl2name"></h1>
             </div>
         </div>
     </div>
+    <form class="menu">
+        <div class="buttongroup search">            
+            <label for="n">Name: </label>
+            <input id="n" value="newgame">
+            <button name="action" value="newgame">start game</button>
+        </div>    
+        <div class="buttongroup secondary">            
+            <button name="action" id="restorebutton" value="restore">Restore game</button>
+            <button name="action" id="purgebutton" value="purge">Purge all data</button>
+        </div>
+        <ul id="gameslist"></ul>
+    </form>
     <div class="body">
-        <div class="row">
+        <div class="row" id="resultslists">
             <div class="half">
                 <ul id="pl1list"></ul>
             </div>
@@ -135,118 +48,15 @@
                 <p>Total: <output id="pl2res">0</output></p>
             </div>
         </div>
-        <div class="row">
+        <form class="form" id="moveform">
             <div class="half">
-                <form class="form">
-                    <input id="pl1" type="search"><button id="p1">Add</button>
-                </form>
+                <input id="pl1" type="search"><input type="submit" value="Add">
             </div>
             <div class="half">
-                <form class="form">
-                    <input id="pl2" type="search"><button id="p2">Add</button>
-                </form>
+                <input id="pl2" type="search"><input type="submit" value="Add">
             </div>
-        </div>
+        </form>
     </div>
-<script>
-(function(){
-/* Check URL parameters */
-const gamename = (window.location.href.indexOf('game') === -1) ? 
-                 'safety' : window.location.href.split('=')[1]; 
-
-
-
-
-const players = [{
-        list: document.querySelector('#pl1list'),
-        listitems: document.querySelectorAll('#pl1list li'),
-        total: document.querySelector('#pl1res'),
-        field: document.querySelector('#pl1'),
-        status: document.querySelector('#status1'),
-        moves: [],
-        score: 0
-    },{
-        list: document.querySelector('#pl2list'),
-        listitems: document.querySelectorAll('#pl2list li'),
-        total: document.querySelector('#pl2res'),
-        field: document.querySelector('#pl2'),
-        status: document.querySelector('#status2'),
-        moves: [],
-        score: 0
-}];
-
-const calculatetotals = () => {
-    players.forEach((player,key) => {
-        let total = 0;
-        players[key].moves = [];
-        [...players[key].list.querySelectorAll('li')].forEach((item => {
-            total += +item.dataset.points;
-            players[key].moves.push({
-                word:item.dataset.word,
-                value:+item.dataset.points
-            });
-        }));
-        players[key].total.innerText = total;
-        players[key].score = total;
-    });
-    let delta = (players[0].score - players[1].score);
-    if (delta === 0) {
-        players[0].status.innerText = '';
-        players[1].status.innerText = '';
-    }
-    if (delta < 0) {
-        players[0].status.innerText = '😒';
-        players[1].status.innerText = '😁';
-        players[1].total.innerText = `${players[1].score} (+${-delta})`;
-    }
-    if (delta > 0) {
-        players[0].status.innerText = '😁';
-        players[1].status.innerText = '😒';
-        players[0].total.innerText = `${players[0].score} (+${delta})`;
-    }
-};
-document.querySelector('body').addEventListener('click', ev => {
-    if (ev.target.nodeName.toLowerCase() === 'button') {
-        let id = +ev.target.id.replace('p','') - 1;
-        if (id > -1) {
-            let value = players[id].field.value;
-            if (value !== '') {
-                players[id].list.innerHTML += `
-                <li data-word="${value.replace(/[\nx|\s]\d+/,'').toUpperCase()}" 
-                    data-points=${+value.match(/-?\d+/)}>
-                    ${value.toUpperCase()}
-                    <button>x</button>
-                </li>`;
-                players[id].field.value = '';
-                players[id].list.lastChild.scrollIntoView({behavior: 'smooth'});
-            }
-            calculatetotals();
-        } else {
-            ev.target.parentNode.parentNode.removeChild(ev.target.parentNode);
-            calculatetotals();
-        }
-        ev.preventDefault();
-    }
-});
-
-function testfill() {
-    let now = '1';
-    const words = 'Obacht! Das hurtig Quasselstrippe ergötzen. Der hochnäsig Kerbholz. Günstling und Affenzahn frickeln piesacken Springinsfeld. Der pomadig Schelm katzbuckeln. Der hanebüchen Bordsteinschwalbe jauchzen. Das halsstarrig Kokolores lobpreisen. Die halbstark Sülze liebkosen. Die Dreikäsehoch verhaspeln das feist Dreikäsehoch. Kesselflicker und Kinkerlitzchen krakelen halbstark Mettigel. Der schamlos Fuchtel picheln. Die Hupfdohle erquicken das famos Schlachtschüssel. Prahlhans und Kittchen friemeln feist Fatzke. Die Aue gutheißen der pfundig Stümper. Gott zum Gruße!'.split(' ');
-    words.forEach((word) => {
-        word += ' ' + (parseInt(Math.random() * 123, 10) + 1);
-        document.querySelector(`#pl${now}list`).innerHTML += `
-        <li data-word="${word.replace(/[\nx|\s]\d+/,'').toUpperCase()}" 
-            data-points=${+word.match(/-?\d+/)}>
-            ${word.toUpperCase()}
-            <button>x</button>
-        </li>`;
-        now = (now === 1) ? 2 : 1;    
-    })
-}
-if (window.location.href.indexOf('debug') !== -1) {
-    testfill();
-}
-})();
-</script>
+    <script src="ScrabbleAdd.js"></script>
 </body>
 </html>

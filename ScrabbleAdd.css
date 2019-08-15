@@ -1,0 +1,144 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 3vw;
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0;
+    padding: 1em;
+}
+ul {
+    margin: 1em 0;
+    padding: 0;
+    list-style: none;
+}
+li {
+    list-style: none;
+    padding: .5em .2em;
+    margin-right: .2em;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+p {
+    background: #333;
+    color: #fff;
+    padding: .2em;
+    margin: .2em .1em;
+}
+h1 {
+    font-weight: normal;
+    clear: both;
+    font-size: 1.4em;
+    margin: .2em;
+    position: relative;   
+}
+h1 span {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+/* Flexbox settings */ 
+
+.half {
+    flex: 1;
+}
+form {
+    margin: 0;
+    padding: 0;
+}
+.form, .row, .form .half {
+    display: flex;
+}
+
+/* App layout */ 
+
+.footer {
+    width: calc(100% - 2em);
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 1em;
+}
+.header {
+    width: calc(100% - 2em);
+    position: fixed;
+    top: 0;
+}
+.menu {
+    margin-top: 1.5em;
+}
+.body {
+    margin-top: 1.5em;
+    height: calc(100vh - 8em);
+    overflow: scroll;
+}
+
+/* Form Element styles */ 
+
+button, input {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font: inherit;
+    border: none;
+    background: transparent;
+}
+
+.form input[type=search] {
+    padding: .2em;
+    margin: .2em .1em;
+    flex-grow: 1;
+    background: #ccc;
+}
+.form input[type=submit] {
+    padding: .2em .5em;
+    margin: .2em .1em;
+    background: #369;
+    color: #fff;
+}
+#resultslists li button {
+    position: absolute;
+    top: .4em;
+    right: 0;
+    border: none;
+    width: 1em;
+    margin-right: .5em;
+    background: transparent;
+    color: #c00;
+}
+
+.header input[type=text] {
+    background: #eee;
+}
+.header input[type=button], .menu #n {
+    border-bottom: 1px dashed #ccc;
+}
+.buttongroup {
+    margin: .5em 0;
+    display: flex;
+}
+.buttongroup button, .buttongroup label, .buttongroup input {
+    margin-right: .2em;
+    padding: .2em .5em;
+}
+.buttongroup button:last-of-type {
+    margin-right: 0;
+}
+.buttongroup button {
+    background: #369;
+    color: #f8f8f8;
+    border-radius: 5px;
+    text-shadow: 1px 1px 3px #111;
+    background: linear-gradient(to bottom, #9cf, #369)
+}
+.buttongroup.secondary button {
+    background: #666;
+    color: #f8f8f8;
+    flex: 1;
+    border-radius: 5px;
+    text-shadow: 1px 1px 3px #111;
+    background: linear-gradient(to bottom, #ccc, #555)
+}
+.buttongroup input {
+    flex-grow: 1;
+}
